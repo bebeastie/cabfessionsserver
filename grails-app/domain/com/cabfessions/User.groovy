@@ -3,15 +3,15 @@ package com.cabfessions
 class User {
 	String clientType
 	String clientId
-	String userKey
+	String key
 	
 	String toString() {
-		"$userKey"
+		"$key"
 	}
 	
     static constraints = {
     	clientType(nullable: false)
     	clientId(nullable: true)
-    	userKey(nullable: false)
+    	key(nullable: false)
     }
 }

@@ -11,18 +11,16 @@ import com.cabfessions.util.*
 class CabfessionsController {
 	static allowedMethods = [create_cabfession: ["POST","GET"], update: "POST", delete: "POST"]
 	
-	
 	def get_or_create_user = {
 		def clientId = params.clientId
-		def clientType = params.clientType
-		
+		def clientType = params.clientType	
 		
 		def output
+		
 		def isNew = true
 		User userInstance 
 		
-		
-		if (params.clientId) {
+		if (params.clientId) { 
 			userInstance = User.findByClientId(clientId)
 		} 
 		
@@ -30,7 +28,7 @@ class CabfessionsController {
 			isNew = false
 		} else {
 			userInstance = new User(clientType: params.clientType, clientId: params.clientId, 
-					userKey: Utils.generateUserKey())
+			key: Utils.generateUserKey())
 			userInstance.save(flush:true)
 		}
 		
@@ -39,25 +37,20 @@ class CabfessionsController {
 		} else {
 			def userMap = [:]
 			userMap.isNew = isNew
-			userMap.key = userInstance.userKey		
+			userMap.key = userInstance.key		
 			output = [user: userMap] 		
 		}
-		 
+		
 		render output as JSON 
 	}
 	
-	def cabfessions_by_cab = {
+	def get_cabfessions_by_cab = {
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		
 		def cabfessionList = [ ]
 		
 		Cabfession.list(params).each { cabfession ->
-			def cabfessionMap = [:]
-			cabfessionMap.id = cabfession.id
-			cabfessionMap.text = cabfession.text
-			cabfessionMap.latitude = cabfession.latitude
-			cabfessionMap.longitude = cabfession.longitude
-			cabfessionList << cabfessionMap
+			cabfessionList << buildCabfessionJSON(cabfession)
 		}
 		
 		def output = [ cabfessions: cabfessionList ]
@@ -66,22 +59,86 @@ class CabfessionsController {
 	}
 	
 	def create_cabfession = {
+		
+		//the eventual JSON output
+		def output
+		
 		def cabfessionInstance = new Cabfession()
 		
-		cabfessionInstance.text = params.text
-		cabfessionInstance.longitude = params.double('longitude')
-		cabfessionInstance.latitude = params.double('latitude')
-		cabfessionInstance.creationDate = new Date()
-		cabfessionInstance.owner = new User(clientType: "clientType", clientId: "clientId").save()
-		cabfessionInstance.cab = new Cab(badge:"4F56").save()
+		//populate basic info 
+		cabfessionInstance.text = params.text 
+		cabfessionInstance.longitude = params.double('longitude') 
+		cabfessionInstance.latitude = params.double('latitude') 
+		cabfessionInstance.creationDate = new Date() 
 		
-		if (cabfessionInstance.save(flush: true)) {
-			render "success"
-		} else {
-			render cabfessionInstance.errors as JSON  
+		//check and verify the user
+		User user
+		if (params.user_key)  {
+			user = User.findByKey(params.user_key)
+		}
+		 
+		if (!user) {
+			//user is required and must be valid
+			output = getUserKeyError() 
+			render output as JSON
+			return
 		}
 		
+		//set the owner
+		cabfessionInstance.owner = user	
 		
+		//look for the cab
+		Cab cab
+		
+		if (params.cab_badge) {
+			cab = Cab.findByBadge(params.cab_badge)
+			if (!cab) {
+				cab = new Cab(badge: params.cab_badge)
+				if (cab.hasErrors() || !cab.save(flush:true)) {
+					//cab badge is invalid
+					output =  [errors: cab.errors]
+					render output as JSON
+					return			
+				}
+			}
+		} else {
+			//cab badge # is required
+			output =  getCabBadgeRequiredError() 
+			render output as JSON
+			return
+		}
+		
+		//now set the cab
+		cabfessionInstance.cab = cab
+		
+		if (cabfessionInstance.save(flush: true)) {
+			output = [cabfession: buildCabfessionJSON(cabfessionInstance)]
+		} else {
+			output = [errors: cabfessionInstance.errors]  
+		}		
+		render output as JSON
 	}
+	
+	protected static HashMap buildCabfessionJSON(Cabfession cabfession) {
+		def cabfessionMap = [:]
+		cabfessionMap.id = cabfession.id
+		cabfessionMap.text = cabfession.text
+		cabfessionMap.latitude = cabfession.latitude
+		cabfessionMap.longitude = cabfession.longitude
+		return cabfessionMap
+	}
+	
+	protected static HashMap getUserKeyError() {
+		[errors: "user_key is invalid or not supplied."]
+	}
+	
+	protected static HashMap getCabBadgeError() { 
+		[errors: "cab_badge is invalid"]
+	}
+	
+	protected static HashMap getCabBadgeRequiredError() { 
+		[errors: "cab_badge is a required field"]
+	}
+	
 	
 }
