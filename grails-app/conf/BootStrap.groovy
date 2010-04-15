@@ -1,3 +1,5 @@
+import grails.converters.JSON;
+
 import com.cabfessions.*
 
 class BootStrap {
@@ -11,6 +13,23 @@ class BootStrap {
 		new Tag(type:"Funny").save()
 		new Tag(type:"Crazy").save()
 		new Tag(type: "Scary").save()
+		
+		JSON.registerObjectMarshaller(Cabfession) {
+			def returnMap = [:]
+			returnMap.id = it.id
+			returnMap.creationDate = it.creationDate
+			returnMap.cab = it.cab
+			returnMap.text = it.text
+			returnMap.latitude = it.latitude
+			returnMap.longitude = it.longitude	
+			return returnMap
+		}
+		
+		JSON.registerObjectMarshaller(Cab) {
+			def returnMap = [:]
+			returnMap.badge = it.badge
+			return returnMap
+		}
 	}
 	
 	def destroy = {

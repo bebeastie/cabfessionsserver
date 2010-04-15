@@ -50,7 +50,7 @@ class CabfessionsController {
 		def cabfessionList = [ ]
 		
 		Cabfession.list(params).each { cabfession ->
-			cabfessionList << buildCabfessionJSON(cabfession)
+			cabfessionList << cabfession
 		}
 		
 		def output = [ cabfessions: cabfessionList ]
@@ -112,16 +112,18 @@ class CabfessionsController {
 		cabfessionInstance.cab = cab
 		
 		if (cabfessionInstance.save(flush: true)) {
-			output = [cabfession: buildCabfessionJSON(cabfessionInstance)]
+			output = [cabfession: cabfessionInstance]
 		} else {
 			output = [errors: cabfessionInstance.errors]  
 		}		
 		render output as JSON
 	}
 	
-	protected static HashMap buildCabfessionJSON(Cabfession cabfession) {
+	protected static HashMap buildCabfessionJSON(Cabfession cabfession) { 
 		def cabfessionMap = [:]
 		cabfessionMap.id = cabfession.id
+		cabfessionMap.creationDate = cabfession.creationDate
+		cabfessionMap.cab = cabfession.cab
 		cabfessionMap.text = cabfession.text
 		cabfessionMap.latitude = cabfession.latitude
 		cabfessionMap.longitude = cabfession.longitude
