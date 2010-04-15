@@ -119,16 +119,16 @@ class CabfessionsController {
 		render output as JSON
 	}
 	
-	protected static HashMap buildCabfessionJSON(Cabfession cabfession) { 
-		def cabfessionMap = [:]
-		cabfessionMap.id = cabfession.id
-		cabfessionMap.creationDate = cabfession.creationDate
-		cabfessionMap.cab = cabfession.cab
-		cabfessionMap.text = cabfession.text
-		cabfessionMap.latitude = cabfession.latitude
-		cabfessionMap.longitude = cabfession.longitude
-		return cabfessionMap
-	}
+//	protected static HashMap buildCabfessionJSON(Cabfession cabfession) { 
+//		def cabfessionMap = [:]
+//		cabfessionMap.id = cabfession.id
+//		cabfessionMap.creationDate = cabfession.creationDate
+//		cabfessionMap.cab = cabfession.cab
+//		cabfessionMap.text = cabfession.text
+//		cabfessionMap.latitude = cabfession.latitude
+//		cabfessionMap.longitude = cabfession.longitude
+//		return cabfessionMap
+//	}
 	
 	protected static HashMap getUserKeyError() {
 		[errors: "user_key is invalid or not supplied."]
