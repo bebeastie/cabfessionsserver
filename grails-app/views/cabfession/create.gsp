@@ -38,6 +38,15 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="owner"><g:message code="cabfession.owner.label" default="Owner" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'owner', 'errors')}">
+                                    <g:select name="owner.id" from="${com.cabfessions.User.list()}" optionKey="id" value="${cabfessionInstance?.owner?.id}" noSelection="['null': '']" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="cab"><g:message code="cabfession.cab.label" default="Cab" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'cab', 'errors')}">
@@ -56,10 +65,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="owner"><g:message code="cabfession.owner.label" default="Owner" /></label>
+                                    <label for="latitude"><g:message code="cabfession.latitude.label" default="Latitude" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'owner', 'errors')}">
-                                    <g:select name="owner.id" from="${com.cabfessions.User.list()}" optionKey="id" value="${cabfessionInstance?.owner?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'latitude', 'errors')}">
+                                    <g:textField name="latitude" value="${fieldValue(bean: cabfessionInstance, field: 'latitude')}" />
                                 </td>
                             </tr>
                         
@@ -69,15 +78,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'longitude', 'errors')}">
                                     <g:textField name="longitude" value="${fieldValue(bean: cabfessionInstance, field: 'longitude')}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="latitude"><g:message code="cabfession.latitude.label" default="Latitude" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'latitude', 'errors')}">
-                                    <g:textField name="latitude" value="${fieldValue(bean: cabfessionInstance, field: 'latitude')}" />
                                 </td>
                             </tr>
                         

@@ -47,10 +47,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="userKey"><g:message code="user.userKey.label" default="User Key" /></label>
+                                    <label for="key"><g:message code="user.key.label" default="Key" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'userKey', 'errors')}">
-                                    <g:textField name="userKey" value="${userInstance?.userKey}" />
+                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'key', 'errors')}">
+                                    <g:textField name="key" value="${userInstance?.key}" />
                                 </td>
                             </tr>
                         

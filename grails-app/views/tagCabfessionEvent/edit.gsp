@@ -1,10 +1,10 @@
 
-<%@ page import="com.cabfessions.User" %>
+<%@ page import="com.cabfessions.TagCabfessionEvent" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'user.label', default: 'User')}" />
+        <g:set var="entityName" value="${message(code: 'tagCabfessionEvent.label', default: 'TagCabfessionEvent')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -18,42 +18,51 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
-            <g:hasErrors bean="${userInstance}">
+            <g:hasErrors bean="${tagCabfessionEventInstance}">
             <div class="errors">
-                <g:renderErrors bean="${userInstance}" as="list" />
+                <g:renderErrors bean="${tagCabfessionEventInstance}" as="list" />
             </div>
             </g:hasErrors>
             <g:form method="post" >
-                <g:hiddenField name="id" value="${userInstance?.id}" />
-                <g:hiddenField name="version" value="${userInstance?.version}" />
+                <g:hiddenField name="id" value="${tagCabfessionEventInstance?.id}" />
+                <g:hiddenField name="version" value="${tagCabfessionEventInstance?.version}" />
                 <div class="dialog">
                     <table>
                         <tbody>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="clientType"><g:message code="user.clientType.label" default="Client Type" /></label>
+                                  <label for="creationDate"><g:message code="tagCabfessionEvent.creationDate.label" default="Creation Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'clientType', 'errors')}">
-                                    <g:textField name="clientType" value="${userInstance?.clientType}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="clientId"><g:message code="user.clientId.label" default="Client Id" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'clientId', 'errors')}">
-                                    <g:textField name="clientId" value="${userInstance?.clientId}" />
+                                <td valign="top" class="value ${hasErrors(bean: tagCabfessionEventInstance, field: 'creationDate', 'errors')}">
+                                    <g:datePicker name="creationDate" precision="day" value="${tagCabfessionEventInstance?.creationDate}"  />
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="key"><g:message code="user.key.label" default="Key" /></label>
+                                  <label for="user"><g:message code="tagCabfessionEvent.user.label" default="User" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'key', 'errors')}">
-                                    <g:textField name="key" value="${userInstance?.key}" />
+                                <td valign="top" class="value ${hasErrors(bean: tagCabfessionEventInstance, field: 'user', 'errors')}">
+                                    <g:select name="user.id" from="${com.cabfessions.User.list()}" optionKey="id" value="${tagCabfessionEventInstance?.user?.id}" noSelection="['null': '']" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tag"><g:message code="tagCabfessionEvent.tag.label" default="Tag" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: tagCabfessionEventInstance, field: 'tag', 'errors')}">
+                                    <g:select name="tag.id" from="${com.cabfessions.Tag.list()}" optionKey="id" value="${tagCabfessionEventInstance?.tag?.id}"  />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="cabfession"><g:message code="tagCabfessionEvent.cabfession.label" default="Cabfession" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: tagCabfessionEventInstance, field: 'cabfession', 'errors')}">
+                                    <g:select name="cabfession.id" from="${com.cabfessions.Cabfession.list()}" optionKey="id" value="${tagCabfessionEventInstance?.cabfession?.id}"  />
                                 </td>
                             </tr>
                         

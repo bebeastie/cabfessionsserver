@@ -28,7 +28,7 @@
                         
                             <g:sortableColumn property="clientId" title="${message(code: 'user.clientId.label', default: 'Client Id')}" />
                         
-                            <g:sortableColumn property="userKey" title="${message(code: 'user.userKey.label', default: 'User Key')}" />
+                            <g:sortableColumn property="key" title="${message(code: 'user.key.label', default: 'Key')}" />
                         
                         </tr>
                     </thead>
@@ -42,7 +42,7 @@
                         
                             <td>${fieldValue(bean: userInstance, field: "clientId")}</td>
                         
-                            <td>${fieldValue(bean: userInstance, field: "userKey")}</td>
+                            <td>${fieldValue(bean: userInstance, field: "key")}</td>
                         
                         </tr>
                     </g:each>

@@ -1,10 +1,10 @@
 
-<%@ page import="com.cabfessions.Cab" %>
+<%@ page import="com.cabfessions.City" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'cab.label', default: 'Cab')}" />
+        <g:set var="entityName" value="${message(code: 'city.label', default: 'City')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -22,23 +22,19 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'cab.id.label', default: 'Id')}" />
+                            <g:sortableColumn property="id" title="${message(code: 'city.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="badge" title="${message(code: 'cab.badge.label', default: 'Badge')}" />
+                            <g:sortableColumn property="name" title="${message(code: 'city.name.label', default: 'Name')}" />
                         
-                            <th><g:message code="cab.city.label" default="City" /></th>
-                   	    
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${cabInstanceList}" status="i" var="cabInstance">
+                    <g:each in="${cityInstanceList}" status="i" var="cityInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${cabInstance.id}">${fieldValue(bean: cabInstance, field: "id")}</g:link></td>
+                            <td><g:link action="show" id="${cityInstance.id}">${fieldValue(bean: cityInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: cabInstance, field: "badge")}</td>
-                        
-                            <td>${fieldValue(bean: cabInstance, field: "city")}</td>
+                            <td>${fieldValue(bean: cityInstance, field: "name")}</td>
                         
                         </tr>
                     </g:each>
@@ -46,7 +42,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${cabInstanceTotal}" />
+                <g:paginate total="${cityInstanceTotal}" />
             </div>
         </div>
     </body>

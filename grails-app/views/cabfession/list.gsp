@@ -26,13 +26,13 @@
                         
                             <g:sortableColumn property="creationDate" title="${message(code: 'cabfession.creationDate.label', default: 'Creation Date')}" />
                         
+                            <th><g:message code="cabfession.owner.label" default="Owner" /></th>
+                   	    
                             <th><g:message code="cabfession.cab.label" default="Cab" /></th>
                    	    
                             <g:sortableColumn property="text" title="${message(code: 'cabfession.text.label', default: 'Text')}" />
                         
-                            <th><g:message code="cabfession.owner.label" default="Owner" /></th>
-                   	    
-                            <g:sortableColumn property="longitude" title="${message(code: 'cabfession.longitude.label', default: 'Longitude')}" />
+                            <g:sortableColumn property="latitude" title="${message(code: 'cabfession.latitude.label', default: 'Latitude')}" />
                         
                         </tr>
                     </thead>
@@ -44,13 +44,13 @@
                         
                             <td><g:formatDate date="${cabfessionInstance.creationDate}" /></td>
                         
+                            <td>${fieldValue(bean: cabfessionInstance, field: "owner")}</td>
+                        
                             <td>${fieldValue(bean: cabfessionInstance, field: "cab")}</td>
                         
                             <td>${fieldValue(bean: cabfessionInstance, field: "text")}</td>
                         
-                            <td>${fieldValue(bean: cabfessionInstance, field: "owner")}</td>
-                        
-                            <td>${fieldValue(bean: cabfessionInstance, field: "longitude")}</td>
+                            <td>${fieldValue(bean: cabfessionInstance, field: "latitude")}</td>
                         
                         </tr>
                     </g:each>

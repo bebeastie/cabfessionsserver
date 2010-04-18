@@ -32,19 +32,19 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="tags"><g:message code="cabfession.tags.label" default="Tags" /></label>
+                                  <label for="creationDate"><g:message code="cabfession.creationDate.label" default="Creation Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tags', 'errors')}">
-                                    <g:select name="tags" from="${com.cabfessions.Tag.list()}" multiple="yes" optionKey="id" size="5" value="${cabfessionInstance?.tags}" />
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'creationDate', 'errors')}">
+                                    <g:datePicker name="creationDate" precision="day" value="${cabfessionInstance?.creationDate}"  />
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="creationDate"><g:message code="cabfession.creationDate.label" default="Creation Date" /></label>
+                                  <label for="owner"><g:message code="cabfession.owner.label" default="Owner" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'creationDate', 'errors')}">
-                                    <g:datePicker name="creationDate" precision="day" value="${cabfessionInstance?.creationDate}"  />
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'owner', 'errors')}">
+                                    <g:select name="owner.id" from="${com.cabfessions.User.list()}" optionKey="id" value="${cabfessionInstance?.owner?.id}" noSelection="['null': '']" />
                                 </td>
                             </tr>
                         
@@ -68,10 +68,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="owner"><g:message code="cabfession.owner.label" default="Owner" /></label>
+                                  <label for="latitude"><g:message code="cabfession.latitude.label" default="Latitude" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'owner', 'errors')}">
-                                    <g:select name="owner.id" from="${com.cabfessions.User.list()}" optionKey="id" value="${cabfessionInstance?.owner?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'latitude', 'errors')}">
+                                    <g:textField name="latitude" value="${fieldValue(bean: cabfessionInstance, field: 'latitude')}" />
                                 </td>
                             </tr>
                         
@@ -86,10 +86,17 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="latitude"><g:message code="cabfession.latitude.label" default="Latitude" /></label>
+                                  <label for="tags"><g:message code="cabfession.tags.label" default="Tags" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'latitude', 'errors')}">
-                                    <g:textField name="latitude" value="${fieldValue(bean: cabfessionInstance, field: 'latitude')}" />
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tags', 'errors')}">
+                                    
+<ul>
+<g:each in="${cabfessionInstance?.tags?}" var="t">
+    <li><g:link controller="tagCabfessionEvent" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
+</g:each>
+</ul>
+<g:link controller="tagCabfessionEvent" action="create" params="['cabfession.id': cabfessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'tagCabfessionEvent.label', default: 'TagCabfessionEvent')])}</g:link>
+
                                 </td>
                             </tr>
                         

@@ -2,10 +2,10 @@ package com.cabfessions
 
 class Cab {
 	String badge
-	String city
+	City city
 	
 	String toString() {
-		"$badge"
+		"$city, $badge"
 	}
 	
     static constraints = {

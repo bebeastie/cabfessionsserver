@@ -1,10 +1,10 @@
 
-<%@ page import="com.cabfessions.Cab" %>
+<%@ page import="com.cabfessions.City" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'cab.label', default: 'Cab')}" />
+        <g:set var="entityName" value="${message(code: 'city.label', default: 'City')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -17,9 +17,9 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
-            <g:hasErrors bean="${cabInstance}">
+            <g:hasErrors bean="${cityInstance}">
             <div class="errors">
-                <g:renderErrors bean="${cabInstance}" as="list" />
+                <g:renderErrors bean="${cityInstance}" as="list" />
             </div>
             </g:hasErrors>
             <g:form action="save" method="post" >
@@ -29,19 +29,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="badge"><g:message code="cab.badge.label" default="Badge" /></label>
+                                    <label for="name"><g:message code="city.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabInstance, field: 'badge', 'errors')}">
-                                    <g:textField name="badge" maxlength="4" value="${cabInstance?.badge}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="city"><g:message code="cab.city.label" default="City" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabInstance, field: 'city', 'errors')}">
-                                    <g:select name="city.id" from="${com.cabfessions.City.list()}" optionKey="id" value="${cabInstance?.city?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: cityInstance, field: 'name', 'errors')}">
+                                    <g:textField name="name" value="${cityInstance?.name}" />
                                 </td>
                             </tr>
                         

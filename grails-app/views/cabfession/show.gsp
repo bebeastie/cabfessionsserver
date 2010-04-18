@@ -30,22 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="cabfession.tags.label" default="Tags" /></td>
+                            <td valign="top" class="name"><g:message code="cabfession.creationDate.label" default="Creation Date" /></td>
                             
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${cabfessionInstance.tags}" var="t">
-                                    <li><g:link controller="tag" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
+                            <td valign="top" class="value"><g:formatDate date="${cabfessionInstance?.creationDate}" /></td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="cabfession.creationDate.label" default="Creation Date" /></td>
+                            <td valign="top" class="name"><g:message code="cabfession.owner.label" default="Owner" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${cabfessionInstance?.creationDate}" /></td>
+                            <td valign="top" class="value"><g:link controller="user" action="show" id="${cabfessionInstance?.owner?.id}">${cabfessionInstance?.owner?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -64,9 +58,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="cabfession.owner.label" default="Owner" /></td>
+                            <td valign="top" class="name"><g:message code="cabfession.latitude.label" default="Latitude" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="user" action="show" id="${cabfessionInstance?.owner?.id}">${cabfessionInstance?.owner?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: cabfessionInstance, field: "latitude")}</td>
                             
                         </tr>
                     
@@ -78,9 +72,15 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="cabfession.latitude.label" default="Latitude" /></td>
+                            <td valign="top" class="name"><g:message code="cabfession.tags.label" default="Tags" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: cabfessionInstance, field: "latitude")}</td>
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                <g:each in="${cabfessionInstance.tags}" var="t">
+                                    <li><g:link controller="tagCabfessionEvent" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
+                                </g:each>
+                                </ul>
+                            </td>
                             
                         </tr>
                     

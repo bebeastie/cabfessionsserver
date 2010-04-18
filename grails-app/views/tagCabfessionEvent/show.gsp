@@ -1,10 +1,10 @@
 
-<%@ page import="com.cabfessions.Cab" %>
+<%@ page import="com.cabfessions.TagCabfessionEvent" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'cab.label', default: 'Cab')}" />
+        <g:set var="entityName" value="${message(code: 'tagCabfessionEvent.label', default: 'TagCabfessionEvent')}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -23,23 +23,37 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="cab.id.label" default="Id" /></td>
+                            <td valign="top" class="name"><g:message code="tagCabfessionEvent.id.label" default="Id" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: cabInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="cab.badge.label" default="Badge" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: cabInstance, field: "badge")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: tagCabfessionEventInstance, field: "id")}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="cab.city.label" default="City" /></td>
+                            <td valign="top" class="name"><g:message code="tagCabfessionEvent.creationDate.label" default="Creation Date" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="city" action="show" id="${cabInstance?.city?.id}">${cabInstance?.city?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:formatDate date="${tagCabfessionEventInstance?.creationDate}" /></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="tagCabfessionEvent.user.label" default="User" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="user" action="show" id="${tagCabfessionEventInstance?.user?.id}">${tagCabfessionEventInstance?.user?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="tagCabfessionEvent.tag.label" default="Tag" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="tag" action="show" id="${tagCabfessionEventInstance?.tag?.id}">${tagCabfessionEventInstance?.tag?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="tagCabfessionEvent.cabfession.label" default="Cabfession" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="cabfession" action="show" id="${tagCabfessionEventInstance?.cabfession?.id}">${tagCabfessionEventInstance?.cabfession?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -48,7 +62,7 @@
             </div>
             <div class="buttons">
                 <g:form>
-                    <g:hiddenField name="id" value="${cabInstance?.id}" />
+                    <g:hiddenField name="id" value="${tagCabfessionEventInstance?.id}" />
                     <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                     <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                 </g:form>
