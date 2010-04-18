@@ -9,7 +9,7 @@ class Cabfession {
 	Double latitude
 	Double longitude
 	
-	static hasMany = [tags: Tag]
+	static hasMany = [tags: TagCabfessionEvent]
 
     static constraints = {
 		creationDate(nullable: false)

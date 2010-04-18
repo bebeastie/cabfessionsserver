@@ -1,16 +1,24 @@
 package com.cabfessions.api.controllers
 
-
+import java.util.Date;
 import grails.converters.JSON
 import com.cabfessions.Cabfession
 import com.cabfessions.User
 import com.cabfessions.Cab
 import com.cabfessions.api.*
 import com.cabfessions.util.*
+import java.text.SimpleDateFormat;
 
 class CabfessionsController {
+	public static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyyMMddHHmmssZ")
+	
 	static allowedMethods = [create_cabfession: ["POST","GET"], update: "POST", delete: "POST"]
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	def get_or_create_user = {
 		def clientId = params.clientId
 		def clientType = params.clientType	
@@ -45,15 +53,39 @@ class CabfessionsController {
 	}
 	
 	def get_cabfessions_by_cab = {
-		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		params.max = Math.min(params.max ? params.int('max') : 50, 100)
 		
-		def cabfessionList = [ ]
+		def cab 
+		def output 
 		
-		Cabfession.list(params).each { cabfession ->
-			cabfessionList << cabfession
+		if (params.cab_badge) {
+			cab = Cab.findByBadge(params.cab_badge)
+			if (!cab) {
+				output =  getCabBadgeError() 
+				render output as JSON
+				return				
+			}
+		} else {
+			//cab badge # is required
+			output =  getCabBadgeRequiredError() 
+			render output as JSON
+			return		
 		}
 		
-		def output = [ cabfessions: cabfessionList ]
+		def c = Cabfession.createCriteria()
+
+		def cabfessions = c.list {
+			and {
+				eq('cab', cab)
+				if(params.older_than && params.older_than != '') {
+					gt('creationDate', DATE_FORMATTER.parse(params.older_than) )
+				}
+				order("creationDate", "desc")
+				maxResults(params.max)
+			}
+		}
+		
+		output = [ cabfessions: cabfessions]
 		
 		render output as JSON
 	}
@@ -118,17 +150,6 @@ class CabfessionsController {
 		}		
 		render output as JSON
 	}
-	
-//	protected static HashMap buildCabfessionJSON(Cabfession cabfession) { 
-//		def cabfessionMap = [:]
-//		cabfessionMap.id = cabfession.id
-//		cabfessionMap.creationDate = cabfession.creationDate
-//		cabfessionMap.cab = cabfession.cab
-//		cabfessionMap.text = cabfession.text
-//		cabfessionMap.latitude = cabfession.latitude
-//		cabfessionMap.longitude = cabfession.longitude
-//		return cabfessionMap
-//	}
 	
 	protected static HashMap getUserKeyError() {
 		[errors: "user_key is invalid or not supplied."]
