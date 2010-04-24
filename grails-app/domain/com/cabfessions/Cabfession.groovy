@@ -11,11 +11,15 @@ class Cabfession {
 	
 	static hasMany = [tags: TagCabfessionEvent]
 
+	String toString() {
+		"$text"
+	}
+	
     static constraints = {
 		creationDate(nullable: false)
 		owner(nullable: true)
 		cab(nullable: false)
-		text(nullable: false)
+		text(nullable: false, blank:false)
 		cab(nullable: false)
 		latitude(nullable: true)
 		longitude(nullable: true)

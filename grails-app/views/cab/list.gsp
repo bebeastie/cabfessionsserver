@@ -26,8 +26,8 @@
                         
                             <g:sortableColumn property="badge" title="${message(code: 'cab.badge.label', default: 'Badge')}" />
                         
-                            <th><g:message code="cab.city.label" default="City" /></th>
-                   	    
+                            <g:sortableColumn property="city" title="${message(code: 'cab.city.label', default: 'City')}" />
+                        
                         </tr>
                     </thead>
                     <tbody>

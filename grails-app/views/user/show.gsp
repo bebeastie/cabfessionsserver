@@ -44,9 +44,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="user.key.label" default="Key" /></td>
+                            <td valign="top" class="name"><g:message code="user.hashKey.label" default="Hash Key" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: userInstance, field: "key")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: userInstance, field: "hashKey")}</td>
                             
                         </tr>
                     

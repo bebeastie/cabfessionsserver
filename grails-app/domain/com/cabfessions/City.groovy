@@ -8,6 +8,6 @@ class City {
 	}
 	
 	static constraints = {
-		name(nullable: false)
+		name(nullable: false, inList: ["nyc","london"])
 	}
 }

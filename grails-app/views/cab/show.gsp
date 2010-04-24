@@ -39,7 +39,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="cab.city.label" default="City" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="city" action="show" id="${cabInstance?.city?.id}">${cabInstance?.city?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: cabInstance, field: "city")}</td>
                             
                         </tr>
                     

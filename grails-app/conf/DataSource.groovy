@@ -4,6 +4,7 @@ dataSource {
 	username = "sa"
 	password = ""
 }
+
 hibernate {
     cache.use_second_level_cache=true
     cache.use_query_cache=true
@@ -25,8 +26,12 @@ environments {
 	}
 	production {
 		dataSource {
+//			dialect=org.hibernate.dialect.MySQLDialect.class
+			driverClassName = "com.mysql.jdbc.Driver"
 			dbCreate = "update"
-			url = "jdbc:hsqldb:file:prodDb;shutdown=true"
+			url = "jdbc:mysql://localhost:3306/cabfessions"
+			username =  "grails"
+			password = "groovy"
 		}
 	}
 }

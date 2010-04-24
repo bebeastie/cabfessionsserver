@@ -6,6 +6,9 @@ class TagCabfessionEvent {
 	Tag tag
 	Cabfession cabfession
 	
+	String toString() {
+		return "Tag: $tag, Cabfession: $cabfession.id"
+	}
 	static constraints = {
 		creationDate(nullable: false)
 		user(nullable: true)

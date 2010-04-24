@@ -4,7 +4,7 @@ import javax.crypto.KeyGenerator
 
 
 public class Utils {
-	public static String generateUserKey() {
+	public static String generateUserHashKey() {
 		UUID.randomUUID().toString();	
 	}	
 }
