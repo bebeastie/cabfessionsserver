@@ -46,7 +46,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="tagCabfessionEvent.tag.label" default="Tag" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="tag" action="show" id="${tagCabfessionEventInstance?.tag?.id}">${tagCabfessionEventInstance?.tag?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: tagCabfessionEventInstance, field: "tag")}</td>
                             
                         </tr>
                     

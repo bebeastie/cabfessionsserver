@@ -44,7 +44,7 @@
                                   <label for="user"><g:message code="tagCabfessionEvent.user.label" default="User" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagCabfessionEventInstance, field: 'user', 'errors')}">
-                                    <g:select name="user.id" from="${com.cabfessions.User.list()}" optionKey="id" value="${tagCabfessionEventInstance?.user?.id}" noSelection="['null': '']" />
+                                    <g:select name="user.id" from="${com.cabfessions.User.list()}" optionKey="id" value="${tagCabfessionEventInstance?.user?.id}"  />
                                 </td>
                             </tr>
                         
@@ -53,7 +53,7 @@
                                   <label for="tag"><g:message code="tagCabfessionEvent.tag.label" default="Tag" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagCabfessionEventInstance, field: 'tag', 'errors')}">
-                                    <g:select name="tag.id" from="${com.cabfessions.Tag.list()}" optionKey="id" value="${tagCabfessionEventInstance?.tag?.id}"  />
+                                    <g:select name="tag" from="${tagCabfessionEventInstance.constraints.tag.inList}" value="${tagCabfessionEventInstance?.tag}" valueMessagePrefix="tagCabfessionEvent.tag"  />
                                 </td>
                             </tr>
                         

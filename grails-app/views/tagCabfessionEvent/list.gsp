@@ -28,8 +28,8 @@
                         
                             <th><g:message code="tagCabfessionEvent.user.label" default="User" /></th>
                    	    
-                            <th><g:message code="tagCabfessionEvent.tag.label" default="Tag" /></th>
-                   	    
+                            <g:sortableColumn property="tag" title="${message(code: 'tagCabfessionEvent.tag.label', default: 'Tag')}" />
+                        
                             <th><g:message code="tagCabfessionEvent.cabfession.label" default="Cabfession" /></th>
                    	    
                         </tr>

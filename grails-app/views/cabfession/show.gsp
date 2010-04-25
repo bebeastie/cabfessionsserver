@@ -72,15 +72,23 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="cabfession.tags.label" default="Tags" /></td>
+                            <td valign="top" class="name"><g:message code="cabfession.tagCountFunny.label" default="Tag Count Funny" /></td>
                             
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${cabfessionInstance.tags}" var="t">
-                                    <li><g:link controller="tagCabfessionEvent" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
+                            <td valign="top" class="value">${fieldValue(bean: cabfessionInstance, field: "tagCountFunny")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="cabfession.tagCountCrazy.label" default="Tag Count Crazy" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: cabfessionInstance, field: "tagCountCrazy")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="cabfession.tagCountScary.label" default="Tag Count Scary" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: cabfessionInstance, field: "tagCountScary")}</td>
                             
                         </tr>
                     

@@ -81,6 +81,33 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="tagCountFunny"><g:message code="cabfession.tagCountFunny.label" default="Tag Count Funny" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountFunny', 'errors')}">
+                                    <g:textField name="tagCountFunny" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountFunny')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="tagCountCrazy"><g:message code="cabfession.tagCountCrazy.label" default="Tag Count Crazy" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountCrazy', 'errors')}">
+                                    <g:textField name="tagCountCrazy" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountCrazy')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="tagCountScary"><g:message code="cabfession.tagCountScary.label" default="Tag Count Scary" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountScary', 'errors')}">
+                                    <g:textField name="tagCountScary" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountScary')}" />
+                                </td>
+                            </tr>
+                        
                         </tbody>
                     </table>
                 </div>

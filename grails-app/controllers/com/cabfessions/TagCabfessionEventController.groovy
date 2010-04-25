@@ -1,5 +1,7 @@
 package com.cabfessions
 
+import com.cabfessions.TagCabfessionEvent;
+
 class TagCabfessionEventController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

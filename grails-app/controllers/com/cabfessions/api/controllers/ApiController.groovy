@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 
 class ApiController {
 	public static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyyMMddHHmmssZ")
+	public static double DEFAULT_GEO_RANGE = 0.007
 	
 	static allowedMethods = [create_cabfession: ["POST","GET"], update: "POST", delete: "POST"]
 	
@@ -20,7 +21,7 @@ class ApiController {
 	 * 
 	 * 
 	 */
-	def get_user = {
+	def get_user_key = {
 		def clientId = params.client_id
 		def clientType = params.client_type	
 		
@@ -28,7 +29,7 @@ class ApiController {
 		
 		def isNew = true
 		User userInstance 
-			
+		
 		if (clientId) { 
 			userInstance = User.findByClientId(clientId)
 		} 
@@ -37,7 +38,7 @@ class ApiController {
 			isNew = false
 		} else {
 			userInstance = new User(clientType: clientType, clientId: clientId, 
-					hashKey: Utils.generateUserHashKey())
+			hashKey: Utils.generateUserHashKey())
 			userInstance.save(flush:true)
 		}
 		
@@ -57,8 +58,14 @@ class ApiController {
 		def badge = params.cab_badge
 		def city = params.city
 		def olderThan = params.older_than
+		def userHashKey = params.user_key
 		
 		Cab cab
+		
+		if (!verifyUser(userHashKey)) {
+			render getUserKeyError() as JSON
+			return
+		}
 		
 		if (badge && city) {
 			cab = Cab.findByBadgeAndCity(badge, city)
@@ -83,9 +90,9 @@ class ApiController {
 				if(olderThan && olderThan != '') {
 					gt('creationDate', DATE_FORMATTER.parse(olderThan) )
 				}
-				order("creationDate", "desc")
-				maxResults(maxNumberResults)
 			}
+			order("creationDate", "desc")
+			maxResults(maxNumberResults)
 		}
 		
 		def returnMap = [:]
@@ -111,10 +118,8 @@ class ApiController {
 		cabfessionInstance.creationDate = new Date() 
 		
 		//check and verify the user
-		User user
-		if (userHashKey)  
-			user = User.findByHashKey(userHashKey)
-				 
+		User user = verifyUser(userHashKey)
+		
 		if (!user) {
 			//user is required and must be valid
 			render getUserKeyError() as JSON
@@ -128,7 +133,7 @@ class ApiController {
 		Cab cab
 		
 		if (cabId) 
-			cab = Cab.findById(cabId)
+		cab = Cab.findById(cabId)
 		
 		//cab is required
 		if (!cab)  {
@@ -147,19 +152,73 @@ class ApiController {
 		render output as JSON
 	}
 	
-
-//	def tag_cabfession = {
-//		if (params.cabfession_id && params.tag_name) {
-//			Cabfession cabfession = Cabfession.findById(params.cabfession_id)
-//			Tag tag = Tag.findByType(params.tag_name)
-//			
-//			
-//			tagCabfessionService.tagCabfession(cabfession, tag)
-//			render "Success"
-//		} else {
-//			render "Need inputs"
-//		}
-//	}
+	def get_cabfessions_by_location = {
+		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
+		def olderThan = params.older_than
+		def latitude = params.double("latitude")
+		def longitude = params.double("longitude")
+		def range = params.range ? params.range : DEFAULT_GEO_RANGE
+		def userHashKey = params.user_key
+		
+		if (!verifyUser(userHashKey)) {
+			render getUserKeyError() as JSON
+			return
+		}
+		
+		if (latitude && longitude) {
+			def c = Cabfession.createCriteria()
+			def cabfessions = c {
+				and {
+					between("latitude", latitude - range, latitude + range)
+					between("longitude", longitude - range, longitude + range)
+					if(olderThan && olderThan != '') {
+						gt('creationDate', DATE_FORMATTER.parse(olderThan) )
+					}
+				}
+				order("creationDate", "desc")
+				maxResults(maxNumberResults)
+			}
+			def output = [cabfessions:cabfessions]
+			render output as JSON
+			return
+		} else {
+			def error =  [errors: "A valid user_key, latitude and longitude are required."] 
+			render error as JSON
+			return
+		}
+	}
+	
+	def tag_cabfession = {
+		def cabfessionId = params.cabfession_id
+		def tag = params.tag
+		def userHashKey = params.user_key
+		
+		//check and verify the user
+		User user = verifyUser(userHashKey)
+		
+		if (!user) {
+			//user is required and must be valid
+			render getUserKeyError() as JSON
+			return
+		}
+		
+		TagCabfessionEvent event
+		
+		if (cabfessionId && tag && userHashKey) {			
+			event = tagCabfessionService.tagCabfession(user, Cabfession.findById(cabfessionId)
+					, tag)
+		} 
+		
+		if (event) {
+			render event as JSON
+		} else {
+			render getTagError() as JSON
+		}
+	}
+	
+	private def User verifyUser(userHashKey) {
+		userHashKey?User.findByHashKey(userHashKey):null
+	}
 	
 	protected static HashMap getUserKeyError() {
 		[errors: "user_key is invalid or not supplied."]
@@ -177,4 +236,8 @@ class ApiController {
 		[errors: "cab_id is required"]
 	}
 	
+	protected static HashMap getTagError() {
+		[errors: "Unknown error. Ensure proper cabfession_id and tag were supplied."]
+	}
+		
 }
