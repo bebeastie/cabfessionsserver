@@ -8,6 +8,8 @@ class TagCabfessionEvent {
 	String tag
 	Cabfession cabfession
 	
+	static belongsTo = Cabfession
+	
 	String toString() {
 		return "Tag: $tag, Cabfession: $cabfession.id"
 	}

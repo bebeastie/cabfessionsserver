@@ -7,20 +7,17 @@ import com.cabfessions.*
 import com.cabfessions.api.*
 import com.cabfessions.util.*
 import java.text.SimpleDateFormat;
+import com.cabfessions.services.*
 
 class ApiController {
-	public static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyyMMddHHmmssZ")
+	public static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
 	public static double DEFAULT_GEO_RANGE = 0.007
 	
 	static allowedMethods = [create_cabfession: ["POST","GET"], update: "POST", delete: "POST"]
 	
 	def tagCabfessionService
+	def neighborhoodService
 	
-	/**
-	 * 
-	 * 
-	 * 
-	 */
 	def get_user_key = {
 		def clientId = params.client_id
 		def clientType = params.client_type	
@@ -101,6 +98,67 @@ class ApiController {
 		render returnMap as JSON
 	}
 	
+	def get_cabfessions_by_location = {
+		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
+		def olderThan = params.older_than
+		def latitude = params.double("latitude")
+		def longitude = params.double("longitude")
+		def range = params.range ? params.double("range") : DEFAULT_GEO_RANGE
+		def userHashKey = params.user_key
+		
+		if (!verifyUser(userHashKey)) {
+			render getUserKeyError() as JSON
+			return
+		}
+		
+		if (latitude && longitude) {
+			def c = Cabfession.createCriteria()
+			def cabfessions = c {
+				and {
+					between("latitude", latitude - range, latitude + range)
+					between("longitude", longitude - range, longitude + range)
+					if(olderThan && olderThan != '') {
+						gt('creationDate', DATE_FORMATTER.parse(olderThan) )
+					}
+				}
+				order("creationDate", "desc")
+				maxResults(maxNumberResults)
+			}
+			def output = [cabfessions:cabfessions]
+			render output as JSON
+			return
+		} else {
+			render getLocationError() as JSON
+			return
+		}
+	}
+	
+	def get_cabfessions_by_tag = {
+		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
+		def startDate = params.start_date ? DATE_FORMATTER.parse(params.start_date) : null
+		def endDate = params.end_date ? DATE_FORMATTER.parse(params.end_date) : null
+		def tag = params.tag
+		
+//		if (!verifyUser(userHashKey)) {
+//			render getUserKeyError() as JSON
+//			return3
+//		}
+//		
+//		if (!TagCabfessionService.VALID_TAGS.contains(tag)) {
+//			def output = [errors: "tag is not valid"]
+//			render output as JSON
+//		}
+		
+				
+		def hql = "select cabfession, count(tags.tag) as counter from TagCabfessionEvent as tags " +
+				"where tags.tag = 'funny' " + 
+				"group by tags.tag, tags.cabfession "  +
+				"order by count(tags.tag) desc"
+		def cabfessions = Cabfession.executeQuery(hql)
+		
+		render cabfessions as JSON
+	}
+	
 	def create_cabfession = {
 		//select inputs
 		def cabId = params.cab_id
@@ -152,42 +210,6 @@ class ApiController {
 		render output as JSON
 	}
 	
-	def get_cabfessions_by_location = {
-		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
-		def olderThan = params.older_than
-		def latitude = params.double("latitude")
-		def longitude = params.double("longitude")
-		def range = params.range ? params.range : DEFAULT_GEO_RANGE
-		def userHashKey = params.user_key
-		
-		if (!verifyUser(userHashKey)) {
-			render getUserKeyError() as JSON
-			return
-		}
-		
-		if (latitude && longitude) {
-			def c = Cabfession.createCriteria()
-			def cabfessions = c {
-				and {
-					between("latitude", latitude - range, latitude + range)
-					between("longitude", longitude - range, longitude + range)
-					if(olderThan && olderThan != '') {
-						gt('creationDate', DATE_FORMATTER.parse(olderThan) )
-					}
-				}
-				order("creationDate", "desc")
-				maxResults(maxNumberResults)
-			}
-			def output = [cabfessions:cabfessions]
-			render output as JSON
-			return
-		} else {
-			def error =  [errors: "A valid user_key, latitude and longitude are required."] 
-			render error as JSON
-			return
-		}
-	}
-	
 	def tag_cabfession = {
 		def cabfessionId = params.cabfession_id
 		def tag = params.tag
@@ -216,28 +238,41 @@ class ApiController {
 		}
 	}
 	
+	def hood_test = {
+		render neighborhoodService.getHood(params.latitude, params.longitude);
+	}
+	
 	private def User verifyUser(userHashKey) {
 		userHashKey?User.findByHashKey(userHashKey):null
 	}
 	
 	protected static HashMap getUserKeyError() {
-		[errors: "user_key is invalid or not supplied."]
+		getErrorMap("user_key is invalid or not supplied.")
 	}
 	
 	protected static HashMap getCabBadgeError() { 
-		[errors: "cab_badge format and/or city is invalid"]
+		getErrorMap("cab_badge format and/or city is invalid")
 	}
 	
 	protected static HashMap getCabAndCityRequiredError() { 
-		[errors: "cab_badge and city are both required fields"]
+		getErrorMap("cab_badge and city are both required fields")
 	}
 	
 	protected static HashMap getCabIdRequired() { 
-		[errors: "cab_id is required"]
+		getErrorMap("cab_id is required")
 	}
 	
 	protected static HashMap getTagError() {
-		[errors: "Unknown error. Ensure proper cabfession_id and tag were supplied."]
+		getErrorMap("Unknown error. Ensure proper cabfession_id and tag were supplied")
+	}
+	
+	protected static HashMap getLocationError() {
+		getErrorMap("A valid user_key, latitude and longitude are required.")
+	}
+	
+	protected static HashMap getErrorMap(String error) {
+		def errors = [error]
+		[errors: errors]
 	}
 		
 }

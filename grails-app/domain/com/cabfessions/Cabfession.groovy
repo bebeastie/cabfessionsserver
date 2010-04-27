@@ -8,10 +8,13 @@ class Cabfession {
 	String text
 	Double latitude
 	Double longitude
+	Neighborhood neighborhood
 	Long tagCountFunny = 0 
 	Long tagCountCrazy = 0
 	Long tagCountScary = 0 
 
+	static hasMany = [tags : TagCabfessionEvent]
+	                  
 	void increaseTagCountFunny() {
 		tagCountFunny++
 	}
@@ -36,6 +39,7 @@ class Cabfession {
 		cab(nullable: false)
 		latitude(nullable: true)
 		longitude(nullable: true)
+		neighborhood(nullable: true)
 //		tagCountFunny(nullable: true)
 //		tagCountCrazy(nullable: true)
 //		tagCountScary(nullable: true)

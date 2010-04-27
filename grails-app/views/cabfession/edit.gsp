@@ -86,6 +86,22 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="tags"><g:message code="cabfession.tags.label" default="Tags" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tags', 'errors')}">
+                                    
+<ul>
+<g:each in="${cabfessionInstance?.tags?}" var="t">
+    <li><g:link controller="tagCabfessionEvent" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
+</g:each>
+</ul>
+<g:link controller="tagCabfessionEvent" action="create" params="['cabfession.id': cabfessionInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'tagCabfessionEvent.label', default: 'TagCabfessionEvent')])}</g:link>
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="tagCountFunny"><g:message code="cabfession.tagCountFunny.label" default="Tag Count Funny" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountFunny', 'errors')}">

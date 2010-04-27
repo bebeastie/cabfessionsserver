@@ -3,19 +3,25 @@ dataSource {
 	driverClassName = "org.hsqldb.jdbcDriver"
 	username = "sa"
 	password = ""
+	
 }
 
 hibernate {
-    cache.use_second_level_cache=true
-    cache.use_query_cache=true
-    cache.provider_class='net.sf.ehcache.hibernate.EhCacheProvider'
+	cache.use_second_level_cache=true
+	cache.use_query_cache=true
+	cache.provider_class='net.sf.ehcache.hibernate.EhCacheProvider'
 }
 // environment specific settings
 environments {
 	development {
 		dataSource {
-			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-			url = "jdbc:hsqldb:mem:devDB"
+			//			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
+			//			url = "jdbc:hsqldb:mem:devDB"
+			driverClassName = "com.mysql.jdbc.Driver"
+			dbCreate = "update"
+			url = "jdbc:mysql://localhost:3306/cabfessions"
+			username =  "grails"
+			password = "groovy"
 		}
 	}
 	test {
@@ -26,7 +32,7 @@ environments {
 	}
 	production {
 		dataSource {
-//			dialect=org.hibernate.dialect.MySQLDialect.class
+			//			dialect=org.hibernate.dialect.MySQLDialect.class
 			driverClassName = "com.mysql.jdbc.Driver"
 			dbCreate = "update"
 			url = "jdbc:mysql://localhost:3306/cabfessions"

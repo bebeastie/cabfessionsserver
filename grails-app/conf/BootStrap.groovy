@@ -17,10 +17,7 @@ class BootStrap {
 			
 			Cabfession cabfession1 = new Cabfession(creationDate:new Date(), owner:user1, cab:cab1, text:"Cabfession 1", latitude:10, longitude:10).save()
 			Cabfession cabfession2 = new Cabfession(creationDate:new Date(), owner:user2, cab:cab2, text:"Cabfession 2", latitude:20, longitude:20).save()
-			
-			Tag funny = new Tag(type:"Funny").save()
-			Tag crazy = new Tag(type:"Crazy").save()
-			Tag scary = new Tag(type: "Scary").save()
+
 		}
 		
 		JSON.registerObjectMarshaller(Cabfession) {
@@ -39,6 +36,15 @@ class BootStrap {
 			returnMap.id = it.id
 			returnMap.badge = it.badge
 			returnMap.city = it.city
+			return returnMap
+		}
+		
+		JSON.registerObjectMarshaller(TagCabfessionEvent) {
+			def returnMap = [:];
+			returnMap.id = it.id;
+			returnMap.creation_date = it.creationDate;
+			returnMap.tag = it.tag;
+			returnMap.cabfession = it.cabfession;
 			return returnMap
 		}
 	}
