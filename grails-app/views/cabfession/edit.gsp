@@ -86,6 +86,15 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="neighborhood"><g:message code="cabfession.neighborhood.label" default="Neighborhood" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'neighborhood', 'errors')}">
+                                    <g:select name="neighborhood.id" from="${com.cabfessions.Neighborhood.list()}" optionKey="id" value="${cabfessionInstance?.neighborhood?.id}" noSelection="['null': '']" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="tags"><g:message code="cabfession.tags.label" default="Tags" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tags', 'errors')}">

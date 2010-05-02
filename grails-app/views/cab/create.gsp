@@ -41,7 +41,7 @@
                                     <label for="city"><g:message code="cab.city.label" default="City" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: cabInstance, field: 'city', 'errors')}">
-                                    <g:select name="city" from="${cabInstance.constraints.city.inList}" value="${cabInstance?.city}" valueMessagePrefix="cab.city"  />
+                                    <g:select name="city.id" from="${com.cabfessions.City.list()}" optionKey="id" value="${cabInstance?.city?.id}"  />
                                 </td>
                             </tr>
                         

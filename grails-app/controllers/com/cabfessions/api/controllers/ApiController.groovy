@@ -65,37 +65,43 @@ class ApiController {
 		}
 		
 		if (badge && city) {
-			cab = Cab.findByBadgeAndCity(badge, city)
-			if (!cab) {
-				//we dont' have a cab yet so lets create one
-				cab = new Cab(city:city, badge:badge).save()
-				if (!cab || cab.errors.hasErrors()) {
-					render getCabBadgeError() as JSON
-					return
+			def returnMap = [:]
+			city = City.findById(city);
+			
+			if (city) {
+				cab = Cab.findByBadgeAndCity(badge, city)	
+				if (!cab) {
+					//we dont' have a cab yet so lets create one
+					cab = new Cab(city:city, badge:badge).save()
+					if (!cab || cab.errors.hasErrors()) {
+						render getCabBadgeError() as JSON
+						return
+					}
+					returnMap.cabfessions = [:]
+				} else {
+					def c = Cabfession.createCriteria()
+					def cabfessions = c {
+						and {
+							eq('cab', cab)
+							if(olderThan && olderThan != '') {
+								gt('creationDate', DATE_FORMATTER.parse(olderThan) )
+							}
+						}
+						order("creationDate", "desc")
+						maxResults(maxNumberResults)
+					}
+					returnMap.cabfessions = cabfessions
 				}
-			} 
+				returnMap.cab = cab
+				render returnMap as JSON  
+			} else {
+				//can't find city
+				render getInvalidCityError()
+			}
 		} else {
 			//cab badge and city are both required
-			render getCabAndCityRequiredError() as JSON
-			return		
+			render getCabAndCityRequiredError() as JSON		
 		}
-		
-		def c = Cabfession.createCriteria()
-		def cabfessions = c {
-			and {
-				eq('cab', cab)
-				if(olderThan && olderThan != '') {
-					gt('creationDate', DATE_FORMATTER.parse(olderThan) )
-				}
-			}
-			order("creationDate", "desc")
-			maxResults(maxNumberResults)
-		}
-		
-		def returnMap = [:]
-		returnMap.cab = cab
-		returnMap.cabfessions = cabfessions
-		render returnMap as JSON
 	}
 	
 	def get_cabfessions_by_location = {
@@ -139,42 +145,38 @@ class ApiController {
 		def endDate = params.end_date ? DATE_FORMATTER.parse(params.end_date) : null
 		def tag = params.tag
 		
-//		if (!verifyUser(userHashKey)) {
-//			render getUserKeyError() as JSON
-//			return3
-//		}
-//		
-//		if (!TagCabfessionService.VALID_TAGS.contains(tag)) {
-//			def output = [errors: "tag is not valid"]
-//			render output as JSON
-//		}
+		//		if (!verifyUser(userHashKey)) {
+		//			render getUserKeyError() as JSON
+		//			return3
+		//		}
+		//		
+		//		if (!TagCabfessionService.VALID_TAGS.contains(tag)) {
+		//			def output = [errors: "tag is not valid"]
+		//			render output as JSON
+		//		}
 		
-				
+		
 		def hql = "select cabfession, count(tags.tag) as counter from TagCabfessionEvent as tags " +
-				"where tags.tag = 'funny' " + 
-				"group by tags.tag, tags.cabfession "  +
-				"order by count(tags.tag) desc"
+		"where tags.tag = 'funny' " + 
+		"group by tags.tag, tags.cabfession "  +
+		"order by count(tags.tag) desc"
 		def cabfessions = Cabfession.executeQuery(hql)
 		
 		render cabfessions as JSON
 	}
 	
 	def create_cabfession = {
-		//select inputs
-		def cabId = params.cab_id
+		def cabBadge = params.cab_badge
+		def city = params.city
 		def userHashKey = params.user_key
-		
-		//the eventual JSON output
-		def output
-		
 		def cabfessionInstance = new Cabfession()
-		
-		//populate basic info 
-		cabfessionInstance.text = params.text 
 		cabfessionInstance.longitude = params.double('longitude') 
 		cabfessionInstance.latitude = params.double('latitude') 
+		cabfessionInstance.text = params.text 
 		cabfessionInstance.creationDate = new Date() 
 		
+		def output
+				
 		//check and verify the user
 		User user = verifyUser(userHashKey)
 		
@@ -190,17 +192,25 @@ class ApiController {
 		//look for the cab
 		Cab cab
 		
-		if (cabId) 
-		cab = Cab.findById(cabId)
+		//TODO
+		//to save calls to the db 
+		//we'll make the assumption that all cabs are in new york right now
+		if (cabBadge && city) {
+			cab = Cab.findByBadge(cabBadge)
+		} 
 		
 		//cab is required
 		if (!cab)  {
-			render getCabIdRequired() as JSON
+			render getCabBadgeError() as JSON
 			return
 		}
 		
 		//now set the cab
 		cabfessionInstance.cab = cab
+		
+		if (cabfessionInstance.latitude && cabfessionInstance.longitude) {
+			cabfessionInstance.neighborhood = neighborhoodService.getHood(params.latitude, params.longitude, cab.city)
+		}
 		
 		if (cabfessionInstance.save(flush: true)) {
 			output = [cabfession: cabfessionInstance]
@@ -228,7 +238,7 @@ class ApiController {
 		
 		if (cabfessionId && tag && userHashKey) {			
 			event = tagCabfessionService.tagCabfession(user, Cabfession.findById(cabfessionId)
-					, tag)
+			, tag)
 		} 
 		
 		if (event) {
@@ -246,6 +256,9 @@ class ApiController {
 		userHashKey?User.findByHashKey(userHashKey):null
 	}
 	
+	protected static HashMap getInvalidCityError() {
+		getErrorMap("city is invalid");
+	}
 	protected static HashMap getUserKeyError() {
 		getErrorMap("user_key is invalid or not supplied.")
 	}
@@ -257,11 +270,7 @@ class ApiController {
 	protected static HashMap getCabAndCityRequiredError() { 
 		getErrorMap("cab_badge and city are both required fields")
 	}
-	
-	protected static HashMap getCabIdRequired() { 
-		getErrorMap("cab_id is required")
-	}
-	
+		
 	protected static HashMap getTagError() {
 		getErrorMap("Unknown error. Ensure proper cabfession_id and tag were supplied")
 	}
@@ -274,5 +283,5 @@ class ApiController {
 		def errors = [error]
 		[errors: errors]
 	}
-		
+	
 }

@@ -40,8 +40,5 @@ class Cabfession {
 		latitude(nullable: true)
 		longitude(nullable: true)
 		neighborhood(nullable: true)
-//		tagCountFunny(nullable: true)
-//		tagCountCrazy(nullable: true)
-//		tagCountScary(nullable: true)
     }
 }

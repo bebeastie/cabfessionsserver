@@ -72,6 +72,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="cabfession.neighborhood.label" default="Neighborhood" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="neighborhood" action="show" id="${cabfessionInstance?.neighborhood?.id}">${cabfessionInstance?.neighborhood?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="cabfession.tags.label" default="Tags" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">

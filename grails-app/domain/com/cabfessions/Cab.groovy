@@ -1,7 +1,7 @@
 package com.cabfessions
 
 class Cab {
-	String city
+	City city
 	String badge
 	
 	String toString() {
@@ -10,6 +10,6 @@ class Cab {
 	
     static constraints = {
     	badge(size: 4..4, nullable: false)
-    	city(nullable: false, inList: ["nyc","london"])
+    	city(nullable: false)
     }
 }

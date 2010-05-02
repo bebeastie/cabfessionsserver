@@ -9,8 +9,12 @@ class BootStrap {
 		if (!Cabfession.get(1)) {
 			// Create some test data
 			
-			Cab cab1 = new Cab(badge:"4F45", city:"nyc").save()
-			Cab cab2 = new Cab(badge:"9f78", city:"nyc").save()
+			City nyc = new City(name: "New York").save()
+			City london = new City(name: "London").save()
+			
+			Cab cab1 = new Cab(badge:"4F45", city:nyc).save()
+			Cab cab2 = new Cab(badge:"9F78", city:nyc).save()
+			Cab cab3 = new Cab(badge:"4F44", city:nyc).save()
 			
 			User user1 = new User(hashKey:Utils.generateUserHashKey(), clientId:"1111", clientType:"iPhone").save()
 			User user2 = new User(hashKey:Utils.generateUserHashKey(), clientId:"2222", clientType:"iPhone").save()
@@ -25,6 +29,7 @@ class BootStrap {
 			returnMap.id = it.id
 			returnMap.creation_date = ApiController.DATE_FORMATTER.format(it.creationDate)
 			returnMap.cab = it.cab
+			returnMap.neighborhood = it.neighborhood
 			returnMap.text = it.text
 			returnMap.latitude = it.latitude
 			returnMap.longitude = it.longitude	
@@ -33,7 +38,6 @@ class BootStrap {
 		
 		JSON.registerObjectMarshaller(Cab) {
 			def returnMap = [:]
-			returnMap.id = it.id
 			returnMap.badge = it.badge
 			returnMap.city = it.city
 			return returnMap
@@ -41,10 +45,22 @@ class BootStrap {
 		
 		JSON.registerObjectMarshaller(TagCabfessionEvent) {
 			def returnMap = [:];
-			returnMap.id = it.id;
 			returnMap.creation_date = it.creationDate;
 			returnMap.tag = it.tag;
 			returnMap.cabfession = it.cabfession;
+			return returnMap
+		}
+		
+		JSON.registerObjectMarshaller(Neighborhood) {
+			def returnMap = [:]
+			returnMap.name = it.name
+			returnMap.borough = it.borough
+			return returnMap
+		}
+		
+		JSON.registerObjectMarshaller(City) {
+			def returnMap = [:]
+			returnMap.name = it.name
 			return returnMap
 		}
 	}
