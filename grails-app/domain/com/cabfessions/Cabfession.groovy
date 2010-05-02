@@ -9,28 +9,65 @@ class Cabfession {
 	Double latitude
 	Double longitude
 	Neighborhood neighborhood
-	Long tagCountFunny = 0 
-	Long tagCountCrazy = 0
-	Long tagCountScary = 0 
+	Long tagCountDevil = 0 
+	Long tagCountAngel = 0
+	Long tagCountLol = 0
+	Long tagCountOmg = 0
+	Long tagCountWtf = 0
+	Long tagCountCute = 0
+	Long tagCountEw = 0
+	Long tagCountGeeky = 0
+	Long tagCountTrashy = 0
+	Long tagCountOld = 0
+	//if you add new tags you need to manually set them to 0 in the db!
 
 	static hasMany = [tags : TagCabfessionEvent]
 	                  
-	void increaseTagCountFunny() {
-		tagCountFunny++
+	void increaseTagCountDevil() {
+		tagCountDevil++
 	}
 	
-	void increaseTagCountCrazy() {
-		tagCountCrazy++
+	void increaseTagCountAngel() {
+		tagCountAngel++
 	}
 	
-	void increaseTagCountScary() {
-		tagCountScary++
+	void increaseTagCountLol() {
+		tagCountLol++
 	}
+	
+	void increaseTagCountOmg() {
+		tagCountOmg++
+	}
+	
+	void increaseTagCountWtf() {
+		tagCountWtf++
+	}
+	
+	void increaseTagCountCute() {
+		tagCountCute++
+	}
+	
+	void increaseTagCountEw() {
+		tagCountEw++
+	}
+	
+	void increaseTagCountGeeky() {
+		tagCountGeeky++
+	}
+	
+	void increaseTagCountTrashy() {
+		tagCountTrashy++
+	}
+	
+	void increaseTagCountOld() {
+		tagCountOld++
+	}	
 	
 	String toString() {
 		"$text"
 	}
 	
+
     static constraints = {
 		creationDate(nullable: false)
 		owner(nullable: true)

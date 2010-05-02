@@ -1,5 +1,7 @@
 package com.cabfessions.api.controllers
 
+import java.util.Calendar;
+import java.util.Calendar;
 import java.util.Date;
 import grails.converters.JSON
 import grails.converters.XML
@@ -7,10 +9,12 @@ import com.cabfessions.*
 import com.cabfessions.api.*
 import com.cabfessions.util.*
 import java.text.SimpleDateFormat;
+import org.apache.commons.lang.time.DateUtils;
 import com.cabfessions.services.*
+import org.hibernate.*
 
 class ApiController {
-	public static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
+	private static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
 	public static double DEFAULT_GEO_RANGE = 0.007
 	
 	static allowedMethods = [create_cabfession: ["POST","GET"], update: "POST", delete: "POST"]
@@ -66,7 +70,7 @@ class ApiController {
 		
 		if (badge && city) {
 			def returnMap = [:]
-			city = City.findById(city);
+			city = City.findByName(city);
 			
 			if (city) {
 				cab = Cab.findByBadgeAndCity(badge, city)	
@@ -141,28 +145,56 @@ class ApiController {
 	
 	def get_cabfessions_by_tag = {
 		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
-		def startDate = params.start_date ? DATE_FORMATTER.parse(params.start_date) : null
-		def endDate = params.end_date ? DATE_FORMATTER.parse(params.end_date) : null
 		def tag = params.tag
+		def range = params.range
+		def userHashKey = params.user_key
 		
-		//		if (!verifyUser(userHashKey)) {
-		//			render getUserKeyError() as JSON
-		//			return3
-		//		}
-		//		
-		//		if (!TagCabfessionService.VALID_TAGS.contains(tag)) {
-		//			def output = [errors: "tag is not valid"]
-		//			render output as JSON
-		//		}
+		String rangeToday = "today"
+		String rangeWeek = "week"
+		String rangeMonth = "month"
+				
+		if (!verifyUser(userHashKey)) {
+			render getUserKeyError() as JSON
+			return
+		}
 		
+		if (!tag || !TagCabfessionService.VALID_TAGS.contains(tag)) {
+			render getInvalidTag() as JSON
+			return
+		}
+		
+		Calendar cal = Calendar.getInstance()
+		cal.set(2010,01,01)
+		
+		Date beginDate = cal.getTime()
+		
+		if (range?.equals(rangeToday)) {
+			beginDate = DateUtils.round(new Date(), Calendar.DATE)
+			cal.setTime(beginDate)
+			cal.add(Calendar.DATE, - 1)
+			beginDate = cal.getTime()
+		} else if (range?.equals(rangeWeek)) {
+			beginDate = DateUtils.round(new Date(), Calendar.DATE)
+			cal.setTime(beginDate)
+			cal.add(Calendar.DATE, - 7)
+			beginDate = cal.getTime()
+		} else if (range?.equals(rangeMonth)) {
+			beginDate = DateUtils.round(new Date(), Calendar.DATE)
+			cal.setTime(beginDate)
+			cal.add(Calendar.DATE, - 31)
+			beginDate = cal.getTime() 
+		}
 		
 		def hql = "select cabfession, count(tags.tag) as counter from TagCabfessionEvent as tags " +
-		"where tags.tag = 'funny' " + 
+		"where tags.tag = :tag " + 
+		" and tags.creationDate > :beginDate " +
 		"group by tags.tag, tags.cabfession "  +
 		"order by count(tags.tag) desc"
-		def cabfessions = Cabfession.executeQuery(hql)
 		
-		render cabfessions as JSON
+		def cabfessions = Cabfession.executeQuery(hql, [beginDate:beginDate, tag:tag])
+		
+		def output = [cabfessions:cabfessions]
+		render output as JSON
 	}
 	
 	def create_cabfession = {
@@ -176,7 +208,7 @@ class ApiController {
 		cabfessionInstance.creationDate = new Date() 
 		
 		def output
-				
+		
 		//check and verify the user
 		User user = verifyUser(userHashKey)
 		
@@ -248,31 +280,32 @@ class ApiController {
 		}
 	}
 	
-	def hood_test = {
-		render neighborhoodService.getHood(params.latitude, params.longitude);
-	}
 	
 	private def User verifyUser(userHashKey) {
 		userHashKey?User.findByHashKey(userHashKey):null
 	}
 	
+	protected static HashMap getInvalidTag() {
+		getErrorMap("tag is invalid or not supplied.");
+	}
+	
 	protected static HashMap getInvalidCityError() {
-		getErrorMap("city is invalid");
+		getErrorMap("city is invalid.");
 	}
 	protected static HashMap getUserKeyError() {
 		getErrorMap("user_key is invalid or not supplied.")
 	}
 	
 	protected static HashMap getCabBadgeError() { 
-		getErrorMap("cab_badge format and/or city is invalid")
+		getErrorMap("cab_badge format and/or city is invalid.")
 	}
 	
 	protected static HashMap getCabAndCityRequiredError() { 
-		getErrorMap("cab_badge and city are both required fields")
+		getErrorMap("cab_badge and city are both required fields.")
 	}
-		
+	
 	protected static HashMap getTagError() {
-		getErrorMap("Unknown error. Ensure proper cabfession_id and tag were supplied")
+		getErrorMap("Unknown error. Ensure proper cabfession_id and tag were supplied.")
 	}
 	
 	protected static HashMap getLocationError() {

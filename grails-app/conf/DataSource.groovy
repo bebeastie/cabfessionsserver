@@ -22,6 +22,7 @@ environments {
 			url = "jdbc:mysql://localhost:3306/cabfessions"
 			username =  "grails"
 			password = "groovy"
+//			loggingSql = true  
 		}
 	}
 	test {
