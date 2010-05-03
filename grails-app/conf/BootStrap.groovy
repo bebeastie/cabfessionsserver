@@ -4,9 +4,10 @@ import com.cabfessions.api.controllers.ApiController;
 import grails.converters.JSON;
 import com.cabfessions.*
 import com.cabfessions.util.*
+import com.cabfessions.controller.api.*
 
 class BootStrap {
-	private static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
+
 	def init = { servletContext ->
 		if (!Cabfession.get(1)) {
 			// Create some test data
@@ -29,12 +30,14 @@ class BootStrap {
 		JSON.registerObjectMarshaller(Cabfession) {
 			def returnMap = [:]
 			returnMap.id = it.id
-			returnMap.creation_date = DATE_FORMATTER.format(it.creationDate)
+			returnMap.creation_date = ApiController.DATE_FORMATTER.format(it.creationDate)
 			returnMap.cab = it.cab
 			returnMap.neighborhood = it.neighborhood
 			returnMap.text = it.text
 			returnMap.latitude = it.latitude
 			returnMap.longitude = it.longitude	
+			returnMap.tagCountAngel = it.tagCountAngel
+			returnMap.tagCountDevil = it.tagCountDevil
 			return returnMap
 		}
 		
@@ -47,7 +50,7 @@ class BootStrap {
 		
 		JSON.registerObjectMarshaller(TagCabfessionEvent) {
 			def returnMap = [:];
-			returnMap.creation_date = it.creationDate;
+			returnMap.creation_date = ApiController.DATE_FORMATTER.format(it.creationDate);
 			returnMap.tag = it.tag;
 			returnMap.cabfession = it.cabfession;
 			return returnMap

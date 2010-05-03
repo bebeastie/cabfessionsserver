@@ -14,15 +14,15 @@ import com.cabfessions.services.*
 import org.hibernate.*
 
 class ApiController {
-	private static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
+	public static  SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
 	public static double DEFAULT_GEO_RANGE = 0.007
 	
-	static allowedMethods = [create_cabfession: ["POST","GET"], update: "POST", delete: "POST"]
+	static allowedMethods = [post_cabfession: ["POST", "GET"], tag_cabfession : ["POST","GET"]]
 	
 	def tagCabfessionService
 	def neighborhoodService
 	
-	def get_user_key = {
+	def user_key = {
 		def clientId = params.client_id
 		def clientType = params.client_type	
 		
@@ -54,7 +54,7 @@ class ApiController {
 		render output as JSON 
 	}
 	
-	def get_cabfessions_by_badge = {
+	def cabfessions_by_badge = {
 		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
 		def badge = params.cab_badge
 		def city = params.city
@@ -108,7 +108,7 @@ class ApiController {
 		}
 	}
 	
-	def get_cabfessions_by_location = {
+	def cabfessions_by_location = {
 		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
 		def olderThan = params.older_than
 		def latitude = params.double("latitude")
@@ -143,7 +143,7 @@ class ApiController {
 		}
 	}
 	
-	def get_cabfessions_by_tag = {
+	def cabfessions_by_tag = {
 		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
 		def tag = params.tag
 		def range = params.range
@@ -167,19 +167,17 @@ class ApiController {
 		cal.set(2010,01,01)
 		
 		Date beginDate = cal.getTime()
+		beginDate = DateUtils.round(new Date(), Calendar.DATE)
 		
 		if (range?.equals(rangeToday)) {
-			beginDate = DateUtils.round(new Date(), Calendar.DATE)
 			cal.setTime(beginDate)
 			cal.add(Calendar.DATE, - 1)
 			beginDate = cal.getTime()
 		} else if (range?.equals(rangeWeek)) {
-			beginDate = DateUtils.round(new Date(), Calendar.DATE)
 			cal.setTime(beginDate)
 			cal.add(Calendar.DATE, - 7)
 			beginDate = cal.getTime()
 		} else if (range?.equals(rangeMonth)) {
-			beginDate = DateUtils.round(new Date(), Calendar.DATE)
 			cal.setTime(beginDate)
 			cal.add(Calendar.DATE, - 31)
 			beginDate = cal.getTime() 
@@ -197,7 +195,7 @@ class ApiController {
 		render output as JSON
 	}
 	
-	def create_cabfession = {
+	def post_cabfession = {
 		def cabBadge = params.cab_badge
 		def city = params.city
 		def userHashKey = params.user_key
@@ -224,11 +222,8 @@ class ApiController {
 		//look for the cab
 		Cab cab
 		
-		//TODO
-		//to save calls to the db 
-		//we'll make the assumption that all cabs are in new york right now
 		if (cabBadge && city) {
-			cab = Cab.findByBadge(cabBadge)
+			cab = Cab.findByBadgeAndCity(cabBadge, City.findByName(city))
 		} 
 		
 		//cab is required
@@ -272,6 +267,7 @@ class ApiController {
 			event = tagCabfessionService.tagCabfession(user, Cabfession.findById(cabfessionId)
 			, tag)
 		} 
+	
 		
 		if (event) {
 			render event as JSON
@@ -315,6 +311,18 @@ class ApiController {
 	protected static HashMap getErrorMap(String error) {
 		def errors = [error]
 		[errors: errors]
+	}
+	
+	protected static HashMap getHeaderOK() {
+		def status = [status: "OK"]
+		def header = [header: status]
+		return header;
+	}
+	
+	protected static HashMap getHeaderError() {
+		def status = [status: "ERROR"]
+		def header = [header: status]
+		return header;	
 	}
 	
 }
