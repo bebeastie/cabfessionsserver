@@ -11,7 +11,7 @@ class User {
 	
     static constraints = {
     	clientType(nullable: false, blank:false)
-    	clientId(nullable: true, blank:false)
+    	clientId(nullable: false, blank:false)
     	hashKey(nullable: false)
     }
 }

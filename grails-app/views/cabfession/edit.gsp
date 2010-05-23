@@ -111,28 +111,91 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="tagCountFunny"><g:message code="cabfession.tagCountFunny.label" default="Tag Count Funny" /></label>
+                                  <label for="tagCountEw"><g:message code="cabfession.tagCountEw.label" default="Tag Count Ew" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountFunny', 'errors')}">
-                                    <g:textField name="tagCountFunny" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountFunny')}" />
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="tagCountCrazy"><g:message code="cabfession.tagCountCrazy.label" default="Tag Count Crazy" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountCrazy', 'errors')}">
-                                    <g:textField name="tagCountCrazy" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountCrazy')}" />
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountEw', 'errors')}">
+                                    <g:textField name="tagCountEw" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountEw')}" />
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="tagCountScary"><g:message code="cabfession.tagCountScary.label" default="Tag Count Scary" /></label>
+                                  <label for="tagCountGeeky"><g:message code="cabfession.tagCountGeeky.label" default="Tag Count Geeky" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountScary', 'errors')}">
-                                    <g:textField name="tagCountScary" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountScary')}" />
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountGeeky', 'errors')}">
+                                    <g:textField name="tagCountGeeky" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountGeeky')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tagCountWtf"><g:message code="cabfession.tagCountWtf.label" default="Tag Count Wtf" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountWtf', 'errors')}">
+                                    <g:textField name="tagCountWtf" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountWtf')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tagCountOmg"><g:message code="cabfession.tagCountOmg.label" default="Tag Count Omg" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountOmg', 'errors')}">
+                                    <g:textField name="tagCountOmg" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountOmg')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tagCountDevil"><g:message code="cabfession.tagCountDevil.label" default="Tag Count Devil" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountDevil', 'errors')}">
+                                    <g:textField name="tagCountDevil" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountDevil')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tagCountTrashy"><g:message code="cabfession.tagCountTrashy.label" default="Tag Count Trashy" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountTrashy', 'errors')}">
+                                    <g:textField name="tagCountTrashy" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountTrashy')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tagCountOld"><g:message code="cabfession.tagCountOld.label" default="Tag Count Old" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountOld', 'errors')}">
+                                    <g:textField name="tagCountOld" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountOld')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tagCountLol"><g:message code="cabfession.tagCountLol.label" default="Tag Count Lol" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountLol', 'errors')}">
+                                    <g:textField name="tagCountLol" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountLol')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tagCountAngel"><g:message code="cabfession.tagCountAngel.label" default="Tag Count Angel" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountAngel', 'errors')}">
+                                    <g:textField name="tagCountAngel" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountAngel')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tagCountCute"><g:message code="cabfession.tagCountCute.label" default="Tag Count Cute" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: cabfessionInstance, field: 'tagCountCute', 'errors')}">
+                                    <g:textField name="tagCountCute" value="${fieldValue(bean: cabfessionInstance, field: 'tagCountCute')}" />
                                 </td>
                             </tr>
                         

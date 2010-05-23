@@ -1,6 +1,6 @@
 package com.cabfessions
 
-import com.cabfessions.services.TagCabfessionService;
+import com.cabfessions.services.TagService;
 
 class TagCabfessionEvent {
 	Date creationDate
@@ -21,7 +21,7 @@ class TagCabfessionEvent {
 	static constraints = {
 		creationDate(nullable: false)
 		user(nullable: false)
-		tag(nullable: false, inList:TagCabfessionService.VALID_TAGS)
+		tag(nullable: false, inList:TagService.VALID_TAGS)
 		cabfession(nullable: false)
 	}
 	

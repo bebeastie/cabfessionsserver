@@ -1,36 +1,31 @@
 package com.cabfessions
 
+import java.util.List;
+
 
 class Cabfession {
+	public static List VALID_CATEGORIES = ["anger", "envy", "gluttony", "pride", "lust", "greed", "sloth", "other"] 
+	                                 
 	Date creationDate
 	User owner
 	Cab cab  
 	String text
+	String category
 	Double latitude
 	Double longitude
 	Neighborhood neighborhood
-	Long tagCountDevil = 0 
-	Long tagCountAngel = 0
+	
+	
 	Long tagCountLol = 0
 	Long tagCountOmg = 0
 	Long tagCountWtf = 0
-	Long tagCountCute = 0
 	Long tagCountEw = 0
-	Long tagCountGeeky = 0
-	Long tagCountTrashy = 0
-	Long tagCountOld = 0
+	Long tagCountUpVote = 0
+	
 	//if you add new tags you need to manually set them to 0 in the db!
 
 	static hasMany = [tags : TagCabfessionEvent]
 	                  
-	void increaseTagCountDevil() {
-		tagCountDevil++
-	}
-	
-	void increaseTagCountAngel() {
-		tagCountAngel++
-	}
-	
 	void increaseTagCountLol() {
 		tagCountLol++
 	}
@@ -42,26 +37,15 @@ class Cabfession {
 	void increaseTagCountWtf() {
 		tagCountWtf++
 	}
-	
-	void increaseTagCountCute() {
-		tagCountCute++
-	}
+
 	
 	void increaseTagCountEw() {
 		tagCountEw++
 	}
 	
-	void increaseTagCountGeeky() {
-		tagCountGeeky++
+	void increaseTagCountUpVote() {
+		tagCountUpVote++
 	}
-	
-	void increaseTagCountTrashy() {
-		tagCountTrashy++
-	}
-	
-	void increaseTagCountOld() {
-		tagCountOld++
-	}	
 	
 	String toString() {
 		"$text"
@@ -77,5 +61,6 @@ class Cabfession {
 		latitude(nullable: true)
 		longitude(nullable: true)
 		neighborhood(nullable: true)
+		category(nullable: true, inList: VALID_CATEGORIES)
     }
 }
