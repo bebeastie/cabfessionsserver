@@ -80,6 +80,8 @@ class ApiCommentController {
 	}
 	
 	def list0 = {
+		def maxNumberResults = Math.min(params.int("max") ? params.int('max') : 50, 100)
+		def offsetNumber = params.int("offset") ? params.int("offset") : 0 
 		def cabfessionId = params.long("cabfession_id")
 		def userHashKey = params.user_key
 
@@ -107,7 +109,8 @@ class ApiCommentController {
 			}
 			order("score", "desc")
 			order("creationDate", "desc")
-			maxResults(100)
+			firstResult(offsetNumber)
+			maxResults(maxNumberResults)
 		}
 		render U.wrapResponse([comments:comments], true) as JSON
 	}

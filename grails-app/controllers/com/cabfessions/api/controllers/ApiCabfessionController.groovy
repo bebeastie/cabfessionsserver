@@ -77,7 +77,7 @@ class ApiCabfessionController {
 	
 	
 	def by_location = {
-		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
+		def maxNumberResults = Math.min(params.int("max") ? params.int("max") : 50, 100)
 		def olderThan = params.older_than
 		def latitude = params.double("latitude")
 		def longitude = params.double("longitude")
@@ -113,7 +113,8 @@ class ApiCabfessionController {
 	
 
 	def by_tag = {
-		def maxNumberResults = Math.min(params.max ? params.int('max') : 50, 100)
+		def maxNumberResults = Math.min(params.int("max") ? params.int('max') : 50, 100)
+		def offsetNumber = params.int("offset") ? params.int("offset") : 0 
 		def tag = params.tag
 		def range = params.range
 		def userHashKey = params.user_key
@@ -132,11 +133,9 @@ class ApiCabfessionController {
 			return
 		}
 		
-		Calendar cal = Calendar.getInstance()
-		cal.set(2010,01,01)
 		
-		Date beginDate = cal.getTime()
-		beginDate = DateUtils.round(new Date(), Calendar.DATE)
+		Calendar cal = Calendar.getInstance()
+		Date beginDate = DateUtils.round(new Date(), Calendar.DATE)
 		
 		if (range?.equals(rangeToday)) {
 			cal.setTime(beginDate)
@@ -150,6 +149,9 @@ class ApiCabfessionController {
 			cal.setTime(beginDate)
 			cal.add(Calendar.DATE, - 31)
 			beginDate = cal.getTime() 
+		} else {
+			cal.set(2010,01,01)
+			beginDate = cal.getTime()
 		}
 		
 		def hql = "select cabfession, count(tags.tag) as counter from TagCabfessionEvent as tags " +
@@ -158,7 +160,7 @@ class ApiCabfessionController {
 		"group by tags.tag, tags.cabfession "  +
 		"order by count(tags.tag) desc"
 		
-		def cabfessions = Cabfession.executeQuery(hql, [beginDate:beginDate, tag:tag])
+		def cabfessions = Cabfession.executeQuery(hql, [beginDate:beginDate, tag:tag], [offset:offsetNumber, max:maxNumberResults])
 		
 		render U.wrapResponse([cabfessions:cabfessions],true) as JSON
 	}
